@@ -179,7 +179,7 @@ class Pedido(Screen):
         
         # Mapeie os nomes dos hambúrgueres para os caminhos das imagens correspondentes
         self.hamburguer_images = {
-            'Hambúrguer Normal': 'hamburgueria.jpg'
+            'Hamburguer com Ovo Estrelado': 'hamburguer2.jpg'
             # Adicione mais hambúrgueres e seus caminhos de imagem conforme necessário
         }
         
@@ -274,7 +274,7 @@ class Pedido(Screen):
     
     def update_hamburguer_image(self, hamburguer_name):
         # Atualiza a imagem do hambúrguer selecionado
-        image_path = self.hamburguer_images.get(hamburguer_name, '')
+        image_path = self.hamburguer_images.get(hamburguer_name, 'hamburguer2.jpg')
         self.selected_hamburguer_image.source = image_path
         self.selected_hamburguer_image.reload()  # Recarrega a imagem para garantir que a nova imagem seja exibida
 
