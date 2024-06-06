@@ -164,3 +164,42 @@ def delete_hamburguer(id):
     conn.commit()
     conn.close()
     return 'Hamburguer excluído com sucesso.'
+
+# Serve para obter todos os dados da tabela de dados "Hamburguer_Ingredientes"
+@app.route('/hamburguer/ingredientes', methods=['GET'])
+def get_hamburguer_ingrediente():
+    conn = db_connection()
+    hamburguer_ingrediente = conn.execute('SELECT * FROM Hamburguer_Ingredientes').fetchall()
+    conn.close()
+    return jsonify([{'nome_hamburguer': row[0], 'id_ingrediente': row[1]} for row in hamburguer_ingrediente])
+
+# Serve para adicionar dados na tabela de dados "Hamburguer_Ingredientes"
+@app.route('/hamburguer/ingredientes', methods=['POST'])
+def add_hamburguer_ingrediente():
+    new_hamburguer_ingrediente = request.json
+    conn = db_connection()
+    conn.execute('INSERT INTO Hamburguer_Ingredientes (nome_hamburguer, id_ingrediente) VALUES (?, ?)',
+                 (new_hamburguer_ingrediente['nome_hamburguer'], new_hamburguer_ingrediente['id_ingrediente']))
+    conn.commit()
+    conn.close()
+    return 'Novo hamburguer e os respetivos ingredientes adicionados com sucesso.', 201
+
+# Serve para atualizar dados na tabela de dados "Hamburguer_Ingredientes"
+@app.route('/hamburguer/ingredientes/<int:id>', methods=['PUT'])
+def update_hamburguer_ingrediente(id):
+    updated_hamburguer_ingrediente = request.json
+    conn = db_connection()
+    conn.execute('UPDATE Hamburguer_Ingredientes SET nome_hamburguer=?, id_ingrediente=? WHERE id=?',
+                 (updated_hamburguer_ingrediente['nome_hamburguer'], updated_hamburguer_ingrediente['id_ingrediente'], id))
+    conn.commit()
+    conn.close()
+    return 'Hamburguer e os respetivos ingredientes atualizados com sucesso.'
+
+# Serve para excluir dados na tabela de dados "Hamburguer_Ingredientes"
+@app.route('/hamburguer/ingredientes/<int:id>', methods=['DELETE'])
+def delete_hamburguer_ingrediente(id):
+    conn = db_connection()
+    conn.execute('DELETE FROM Hamburguer_Ingredientes WHERE id=?', (id,))
+    conn.commit()
+    conn.close()
+    return 'Hamburguer e os respetivos ingredientes excluídos com sucesso.'
