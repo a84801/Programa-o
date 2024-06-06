@@ -18,33 +18,29 @@ def db_connection():
 class EmailScreen(Screen):
     def __init__(self, **kwargs):
         super(EmailScreen, self).__init__(**kwargs)
+
+        # Adiciona a imagem ocupando toda a tela
+        self.image = Image(source='hamburgueria.jpg', allow_stretch=True, keep_ratio=False, size_hint=(1, 1))
+        self.add_widget(self.image)
         
-        # Layout principal da tela, um GridLayout com duas colunas
-        self.main_layout = GridLayout(cols=2)
-        
-        # Adiciona a imagem à esquerda da página
-        self.image = Image(source='hamburgueria.jpg', allow_stretch=True, keep_ratio=False)
-        self.main_layout.add_widget(self.image)
-        
-        # Adiciona o formulário do email à direita
-        self.login_layout = GridLayout(cols=1)
-        self.main_layout.add_widget(self.login_layout)
+        # Adiciona o formulário do email
+        self.login_layout = GridLayout(cols=1, size_hint=(None, None), width=300, height=200)
+        self.login_layout.center = self.image.center  # centraliza o formulário na tela
+        self.login_layout.background_color = (0, 0, 0, 0)  # torna o fundo transparente
+        self.add_widget(self.login_layout)
         
         # Adiciona os widgets ao formulário de email
-        self.login_layout.add_widget(Label(text='Email'))
-        self.login_input = TextInput(multiline=False)
+        self.login_layout.add_widget(Label(text='Email', color=(1, 1, 1, 1)))
+        self.login_input = TextInput(multiline=False, background_color=(1, 1, 1, 0))
         self.login_layout.add_widget(self.login_input)
 
-        self.login_layout.add_widget(Label(text='Password'))
-        self.password_input = TextInput(password=True, multiline=False)
+        self.login_layout.add_widget(Label(text='Password', color=(1, 1, 1, 1)))
+        self.password_input = TextInput(password=True, multiline=False, background_color=(1, 1, 1, 0))
         self.login_layout.add_widget(self.password_input)
 
-        self.login_button = Button(text='Login', size_hint_x=10, width=10)
+        self.login_button = Button(text='Login')
         self.login_button.bind(on_press=self.verify_credentials)
         self.login_layout.add_widget(self.login_button)
-        
-        # Adicionando o layout principal à tela
-        self.add_widget(self.main_layout)
 
     def verify_credentials(self, instance):
         login = self.login_input.text
@@ -57,10 +53,10 @@ class EmailScreen(Screen):
         conn.close()
 
         if user:
-            print("Login successful")
+            print("Sucesso a iniciar o email.")
             self.manager.current = 'Main'
         else:
-            print("Invalid credentials")
+            print("Tente de novo.")
 
 class MainScreen(Screen):
     def __init__(self, **kwargs):
