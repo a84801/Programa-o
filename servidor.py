@@ -125,3 +125,42 @@ def delete_ingrediente(id):
     conn.commit()
     conn.close()
     return 'Ingrediente(s) excluído(s) com sucesso.'
+
+# Serve para obter todos os dados da tabela de dados "Hamburgueres"
+@app.route('/hamburgueres', methods=['GET'])
+def get_hamburguer():
+    conn = db_connection()
+    hamburguer = conn.execute('SELECT * FROM Hamburgueres').fetchall()
+    conn.close()
+    return jsonify([{'nome_hamburguer': row[0], 'preco': row[1]} for row in hamburguer])
+
+# Serve para adicionar dados na tabela de dados "Hamburgueres"
+@app.route('/hamburgueres', methods=['POST'])
+def add_hamburguer():
+    new_hamburguer = request.json
+    conn = db_connection()
+    conn.execute('INSERT INTO Hamburgueres (nome_hamburguer, preco) VALUES (?, ?)',
+                 (new_hamburguer['nome_hamburguer'], new_hamburguer['preco']))
+    conn.commit()
+    conn.close()
+    return 'Novo Hamburguer adicionado com sucesso.', 201
+
+# Serve para atualizar dados na tabela de dados "Hamburgueres"
+@app.route('/hamburgueres/<int:id>', methods=['PUT'])
+def update_hamburguer(id):
+    updated_hamburguer = request.json
+    conn = db_connection()
+    conn.execute('UPDATE Hamburgueres SET nome_hamburguer=?, preco=? WHERE id=?',
+                 (updated_hamburguer['nome_hamburguer'], updated_hamburguer['preco'], id))
+    conn.commit()
+    conn.close()
+    return 'Hamburguer atualizado com sucesso.'
+
+# Serve para excluir dados na tabela de dados "Hamburgueres"
+@app.route('/hamburgueres/<int:id>', methods=['DELETE'])
+def delete_hamburguer(id):
+    conn = db_connection()
+    conn.execute('DELETE FROM Hamburgueres WHERE id=?', (id,))
+    conn.commit()
+    conn.close()
+    return 'Hamburguer excluído com sucesso.'
