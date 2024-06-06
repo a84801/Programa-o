@@ -19,26 +19,27 @@ class EmailScreen(Screen):
     def __init__(self, **kwargs):
         super(EmailScreen, self).__init__(**kwargs)
 
-        # Adiciona a imagem ocupando toda a tela
+        # Imagem principal que ocupa a página inteira
         self.image = Image(source='hamburgueria.jpg', allow_stretch=True, keep_ratio=False, size_hint=(1, 1))
         self.add_widget(self.image)
-        
-        # Adiciona o formulário do email
-        self.login_layout = GridLayout(cols=1, size_hint=(None, None), width=300, height=200)
-        self.login_layout.center = self.image.center  # centraliza o formulário na tela
-        self.login_layout.background_color = (0, 0, 0, 0)  # torna o fundo transparente
+
+        # Formulário e o tamanho que irá ocupar
+        self.login_layout = GridLayout(cols=2, size_hint=(None, None), width=1000, height=200)
         self.add_widget(self.login_layout)
-        
-        # Adiciona os widgets ao formulário de email
-        self.login_layout.add_widget(Label(text='Email', color=(1, 1, 1, 1)))
-        self.login_input = TextInput(multiline=False, background_color=(1, 1, 1, 0))
+
+        # Adiciona o formulário do Email
+        self.login_layout.add_widget(Label(text='Email'))
+        self.login_input = TextInput(multiline=False)
         self.login_layout.add_widget(self.login_input)
 
-        self.login_layout.add_widget(Label(text='Password', color=(1, 1, 1, 1)))
-        self.password_input = TextInput(password=True, multiline=False, background_color=(1, 1, 1, 0))
+        # Adiciona o formulário da Password
+        self.login_layout.add_widget(Label(text='Password'))
+        self.password_input = TextInput(password=True, multiline=False)
         self.login_layout.add_widget(self.password_input)
 
-        self.login_button = Button(text='Login')
+        # Adiciona o botão de login na parte inferior do layout
+        self.login_layout.add_widget(Label())  # Adiciona um espaço vazio na grid para alinhar o botão
+        self.login_button = Button(text='Entrar')
         self.login_button.bind(on_press=self.verify_credentials)
         self.login_layout.add_widget(self.login_button)
 
@@ -53,7 +54,7 @@ class EmailScreen(Screen):
         conn.close()
 
         if user:
-            print("Sucesso a iniciar o email.")
+            print("Sucesso a entrar.")
             self.manager.current = 'Main'
         else:
             print("Tente de novo.")
@@ -62,34 +63,27 @@ class MainScreen(Screen):
     def __init__(self, **kwargs):
         super(MainScreen, self).__init__(**kwargs)
         
-        # Layout principal com duas colunas
-        layout = GridLayout(cols=2)
+        # Imagem principal que ocupa a página inteira
+        self.image = Image(source='hamburgueria.jpg', allow_stretch=True, keep_ratio=False, size_hint=(1, 1))
+        self.add_widget(self.image)
         
-        # Adicionando a imagem à esquerda
-        self.image = Image(source='hamburgueria.jpg', allow_stretch=True, keep_ratio=False)
-        layout.add_widget(self.image)
-        
-        # Layout para os botões à direita
-        button_layout = GridLayout(cols=1, padding=(10, 0, 10, 0))
+        #
+        button_layout = GridLayout(cols=2, size_hint=(None, None), width=1000, height=200)
         
         # Botões
-        self.add_client_button = Button(text='Adicionar novo Cliente', size_hint=(1, None), height=100, background_color=(0, 0, 0, 0))
+        self.add_client_button = Button(text='Adicionar novo Cliente', size_hint=(1, None), height=100, background_color=(1, 1, 1, 1))
         self.add_encomenda_button = Button(text='Adicionar nova Encomenda', size_hint=(1, None), height=50, background_color=(0, 0, 0, 0))
         
-        # Adicionando eventos aos botões
+        # Adiciona-se a função dos botões (ao carregar)
         self.add_client_button.bind(on_press=self.go_to_client_screen)
         self.add_encomenda_button.bind(on_press=self.go_to_encomenda_screen)
         
-        # Adicionando os botões ao layout
+        # Adiciona-se os botões à página
         button_layout.add_widget(self.add_client_button)
         button_layout.add_widget(self.add_encomenda_button)
         
         # Adicionando o layout dos botões à direita ao layout principal
-        layout.add_widget(button_layout)
-        
-        # Adicionando o layout principal à tela
-        self.add_widget(layout)
-
+        self.add_widget(button_layout)
         
     def go_to_client_screen(self, instance):
         self.manager.current = 'Clientes'
@@ -102,33 +96,38 @@ class Cliente(Screen):
         super(Cliente, self).__init__(**kwargs)
         self.conn = db_connection()
         self.cursor = self.conn.cursor()
-        layout = GridLayout(cols=2)
         
-        layout.add_widget(Label(text='Nome completo'))
+        # Imagem principal que ocupa a página inteira
+        self.image = Image(source='hamburgueria.jpg', allow_stretch=True, keep_ratio=False, size_hint=(1, 1))
+        self.add_widget(self.image)
+        
+        # Formulário e o tamanho que irá ocupar
+        self.login_layout = GridLayout(cols=2, size_hint=(None, None), width=1000, height=200)
+        self.add_widget(self.login_layout)
+        
+        self.login_layout.add_widget(Label(text='Nome completo'))
         self.client_name = TextInput(multiline=False)
-        layout.add_widget(self.client_name)
+        self.login_layout.add_widget(self.client_name)
 
-        layout.add_widget(Label(text='Morada'))
+        self.login_layout.add_widget(Label(text='Morada'))
         self.client_address = TextInput(multiline=False)
-        layout.add_widget(self.client_address)
+        self.login_layout.add_widget(self.client_address)
 
-        layout.add_widget(Label(text='Número de telemóvel'))
+        self.login_layout.add_widget(Label(text='Número de telemóvel'))
         self.client_phone = TextInput(multiline=False)
-        layout.add_widget(self.client_phone)
+        self.login_layout.add_widget(self.client_phone)
 
         self.add_client_button = Button(text='Adicionar Cliente')
         self.add_client_button.bind(on_press=self.add_client)
-        layout.add_widget(self.add_client_button)
+        self.login_layout.add_widget(self.add_client_button)
         
         self.delete_client_button = Button(text='Apagar Cliente')
         self.delete_client_button.bind(on_press=self.delete_client)
-        layout.add_widget(self.delete_client_button)
+        self.login_layout.add_widget(self.delete_client_button)
 
-        self.back_button = Button(text='Voltar para o Menu Principal')
+        self.back_button = Button(text='Voltar para o Menu Principal', size_hint=(1, 1), width=200, height=50)
         self.back_button.bind(on_press=self.go_to_main_screen)
-        layout.add_widget(self.back_button)
-        
-        self.add_widget(layout)
+        self.login_layout.add_widget(self.back_button)
 
     def go_to_main_screen(self, instance):
         self.manager.current = 'Main'
@@ -167,14 +166,21 @@ class Pedido(Screen):
         self.conn = db_connection()
         self.cursor = self.conn.cursor()
         
-        layout = GridLayout(cols=2)
+        # Imagem principal que ocupa a página inteira
+        self.image = Image(source='hamburgueria.jpg', allow_stretch=True, keep_ratio=False, size_hint=(1, 1))
+        self.add_widget(self.image)
+        
+        # Formulário e o tamanho que irá ocupar
+        self.login_layout = GridLayout(cols=2, size_hint=(None, None), width=1000, height=200)
+        self.add_widget(self.login_layout)
         
         # DropDown para escolher o cliente
         self.client_dropdown = DropDown()
         
         # Mapeie os nomes dos hambúrgueres para os caminhos das imagens correspondentes
         self.hamburguer_images = {
-            'Hambúrguer Normal': 'hamburguer1.jpg'
+            'Hambúrguer Normal': 'hamburgueria.jpg'
+            # Adicione mais hambúrgueres e seus caminhos de imagem conforme necessário
         }
         
         # Obtendo os nomes dos clientes da base de dados
@@ -190,8 +196,8 @@ class Pedido(Screen):
         self.client_select_button.bind(on_release=self.client_dropdown.open)
         self.client_dropdown.bind(on_select=lambda instance, x: self.show_selected_client(x))
         
-        layout.add_widget(Label(text='Clientes'))
-        layout.add_widget(self.client_select_button)
+        self.login_layout.add_widget(Label(text='Clientes'))
+        self.login_layout.add_widget(self.client_select_button)
         
         self.hamburguer_dropdown = DropDown()
         
@@ -210,45 +216,43 @@ class Pedido(Screen):
         self.hamburguer_select_button.bind(on_release=self.hamburguer_dropdown.open)
         self.hamburguer_dropdown.bind(on_select=lambda instance, x: self.show_selected_hamburguer(x))
         
-        layout.add_widget(Label(text='Hambúrgueres'))
-        layout.add_widget(self.hamburguer_select_button)
+        self.login_layout.add_widget(Label(text='Hambúrgueres'))
+        self.login_layout.add_widget(self.hamburguer_select_button)
         
         # Campo de entrada de texto para a quantidade de hambúrgueres
         self.quantity_input = TextInput(multiline=False, input_type='number', input_filter='int')
         self.quantity_input.bind(text=self.calculate_total)  # Atualiza o total quando a quantidade muda
-        layout.add_widget(Label(text='Quantidade de Hambúrgueres'))
-        layout.add_widget(self.quantity_input)
+        self.login_layout.add_widget(Label(text='Quantidade de Hambúrgueres'))
+        self.login_layout.add_widget(self.quantity_input)
         
         # Spinner para escolher o tamanho do hambúrguer
         self.size_spinner = Spinner(
             text='Escolha o Tamanho',
             values=('Pequeno', 'Médio', 'Grande'),
         )
-        layout.add_widget(Label(text='Tamanho do Hambúrguer'))
-        layout.add_widget(self.size_spinner)
+        self.login_layout.add_widget(Label(text='Tamanho do Hambúrguer'))
+        self.login_layout.add_widget(self.size_spinner)
         
         # Label para exibir o valor total
         self.total_label = Label(text='')
-        layout.add_widget(Label(text='Valor Total'))
-        layout.add_widget(self.total_label)
+        self.login_layout.add_widget(Label(text='Valor Total'))
+        self.login_layout.add_widget(self.total_label)
         
         # Labels para exibir o cliente e o hambúrguer selecionados
         self.selected_client_label = Label(text='')
-        layout.add_widget(self.selected_client_label)
+        self.login_layout.add_widget(self.selected_client_label)
         
         self.selected_hamburguer_label = Label(text='')
-        layout.add_widget(self.selected_hamburguer_label)
-        
-        # Adicionando a imagem à direita
-        self.image = Image(source='hamburgueria.jpg', allow_stretch=True, keep_ratio=False)
-        layout.add_widget(self.image)
+        self.login_layout.add_widget(self.selected_hamburguer_label)
         
         self.back_button = Button(text='Voltar para o Menu Principal')
         self.back_button.bind(on_press=self.go_to_main_screen)
-        layout.add_widget(self.back_button)
+        self.login_layout.add_widget(self.back_button)
+        
+        # Adiciona o widget de imagem do hambúrguer selecionado
+        self.selected_hamburguer_image = Image(size_hint=(None, None), width=200, height=200)
+        self.add_widget(self.selected_hamburguer_image)
 
-        self.add_widget(layout)
-    
     def go_to_main_screen(self, instance):
         self.manager.current = 'Main'
         
@@ -258,6 +262,7 @@ class Pedido(Screen):
     def show_selected_hamburguer(self, hamburguer_name):
         self.hamburguer_select_button.text = hamburguer_name
         self.calculate_total()  # Atualiza o total quando o hambúrguer muda
+        self.update_hamburguer_image(hamburguer_name)  # Atualiza a imagem do hambúrguer
     
     def calculate_total(self, *args):
         # Calcula o valor total com base no preço do hambúrguer selecionado e na quantidade
@@ -266,6 +271,12 @@ class Pedido(Screen):
         price_per_burger = self.hamburguer_prices.get(hamburguer_name, 0)
         total = quantity * price_per_burger
         self.total_label.text = f'R${total:.2f}'  # Exibe o total na label
+    
+    def update_hamburguer_image(self, hamburguer_name):
+        # Atualiza a imagem do hambúrguer selecionado
+        image_path = self.hamburguer_images.get(hamburguer_name, '')
+        self.selected_hamburguer_image.source = image_path
+        self.selected_hamburguer_image.reload()  # Recarrega a imagem para garantir que a nova imagem seja exibida
 
 class First(ScreenManager):
     pass
@@ -281,3 +292,4 @@ class Aplicação(App):
 
 if __name__ == '__main__':
     Aplicação().run()
+    
