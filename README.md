@@ -1,41 +1,44 @@
-# Programa-o
+# Tavira Hamburgueria
 
-Tavira Hamburgueria
+## Descrição
 
-Este projeto é uma aplicação que tem as seguintes funcionalidades:
-    Adicionar clientes à base de dados
-    Remover clientes da base de dados
-    Fazer pedidos ou encomendas da própria hamburgueria
-    Gerir usuários
+Tavira Hamburgueria é um projeto de aplicativo que oferece funcionalidades para gerenciar uma hamburgueria. Com este aplicativo, é possível adicionar clientes à base de dados, fazer pedidos/encomendas, gerir usuários e associar ingredientes a hambúrgueres.
 
-Funcionalidades
-    Na base de dados é possível fazer
-    Adicionar, visualizar, atualizar e excluir clientes
-    Adicionar, visualizar, atualizar e excluir pedidos
-    Adicionar, visualizar, atualizar e excluir usuários
-    Adicionar, visualizar, atualizar e excluir ingredientes e hambúrgueres
-Associar ingredientes a hambúrgueres
-Calcular automaticamente o valor total dos pedidos com base no hambúrguer selecionado, quantidade e tamanho
-Interface de usuário simples e intuitiva
-Autenticação de usuário para acessar as funcionalidades administrativas
+## Funcionalidades
 
-Instruções de Utilização
-    Clonar o repositório Git para o seu ambiente local.
-    Necessário ter o Python instalado no Visual Studio Code.
-    Necessário instalar as bibliotecas que são possíveis utilizar com o Python usando pip install Flask.
-    Necessário instalar as bibliotecas que são possíveis utilizar com o Python usando pip install SQLite3.
-    Necessário instalar as bibliotecas que são possíveis utilizar com o Python usando pip install Kivy.
-    Necessário executar o ficheiro base_de_dados.py para iniciar a base de dados.
-    Necessário executar o ficheiro servidor.py para iniciar o servidor Flask.
-    Necessário executar o ficheiro interface.py para iniciar a aplicação.
-    Ao executar o ficheiro servidor.py irá enviar este URL: http://localhost:5000 mas para iniciar a aplicação.
-Na tela de login, insira as credenciais de um usuário existente no banco de dados ou crie um novo usuário.
-Depois de fazer login, você será redirecionado para o menu principal, onde pode acessar as diferentes funcionalidades do aplicativo.
+- Gerenciamento de Clientes:
+  - Adicionar, visualizar, atualizar e excluir clientes.
+- Gerenciamento de Pedidos:
+  - Adicionar, visualizar, atualizar e excluir pedidos.
+- Gerenciamento de Usuários:
+  - Adicionar, visualizar, atualizar e excluir usuários.
+- Gerenciamento de Ingredientes e Hambúrgueres:
+  - Adicionar, visualizar, atualizar e excluir ingredientes e hambúrgueres.
+- Associação de Ingredientes a Hambúrgueres.
+- Cálculo automático do valor total dos pedidos com base no hambúrguer selecionado, quantidade e tamanho.
+- Interface de usuário simples e intuitiva.
+- Autenticação de usuário para acessar funcionalidades administrativas.
 
-Requisitos do Sistema:
-    Python (última versão existente)
-    Flask
-    SQLite3
-    Kivy (para a interface gráfica)
+## Instruções de Utilização
 
-Espero que com estas instruções consiga ajudar a guiar as próximas pessoas na utilização do meu projeto!
+1. Clonar o repositório Git para o seu ambiente local.
+2. Instalar o Python no Visual Studio Code.
+3. Instalar as bibliotecas necessárias utilizando pip install:
+   - Flask
+   - SQLite3
+   - Kivy
+4. Executar o script "base_de_dados.py" para iniciar a base de dados.
+5. Executar o script "servidor.py" para iniciar o servidor Flask.
+6. Executar o script "interface.py" para iniciar a aplicação.
+7. Acessar o aplicativo através do navegador utilizando o URL fornecido pelo servidor Flask.
+8. Na tela de login, insira as credenciais de um usuário existente no banco de dados ou crie um novo usuário.
+9. Após o login, você será redirecionado para o menu principal, onde poderá acessar as diferentes funcionalidades do aplicativo.
+
+## Requisitos do Sistema
+
+- Python (última versão existente)
+- Flask
+- SQLite3
+- Kivy (para a interface gráfica)
+
+Espero que estas instruções sejam úteis para orientar os usuários na utilização do projeto Tavira Hamburgueria!
