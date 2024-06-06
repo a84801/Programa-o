@@ -15,23 +15,23 @@ base_de_dados = "hamburgueria.db"
 def db_connection():
     return sqlite3.connect(base_de_dados)
 
-class LoginScreen(Screen):
+class EmailScreen(Screen):
     def __init__(self, **kwargs):
-        super(LoginScreen, self).__init__(**kwargs)
+        super(EmailScreen, self).__init__(**kwargs)
         
-        # Layout principal da tela, um GridLayout com 1 coluna
+        # Layout principal da tela, um GridLayout com duas colunas
         self.main_layout = GridLayout(cols=2)
         
-        # Adicionando a imagem à esquerda
+        # Adiciona a imagem à esquerda da página
         self.image = Image(source='hamburgueria.jpg', allow_stretch=True, keep_ratio=False)
         self.main_layout.add_widget(self.image)
         
-        # Adicionando o formulário de login à direita
+        # Adiciona o formulário do email à direita
         self.login_layout = GridLayout(cols=1)
         self.main_layout.add_widget(self.login_layout)
         
-        # Adicionando os widgets ao formulário de login
-        self.login_layout.add_widget(Label(text='Login'))
+        # Adiciona os widgets ao formulário de email
+        self.login_layout.add_widget(Label(text='Email'))
         self.login_input = TextInput(multiline=False)
         self.login_layout.add_widget(self.login_input)
 
@@ -277,7 +277,7 @@ class First(ScreenManager):
 class Aplicação(App):
     def build(self):
         first = First()
-        first.add_widget(LoginScreen(name='Login'))
+        first.add_widget(EmailScreen(name='Email'))
         first.add_widget(MainScreen(name='Main'))
         first.add_widget(Cliente(name='Clientes'))
         first.add_widget(Pedido(name='Pedidos'))
