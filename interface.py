@@ -38,7 +38,7 @@ class EmailScreen(Screen):
         self.login_layout.add_widget(self.password_input)
 
         # Adiciona o botão de login na parte inferior do layout
-        self.login_layout.add_widget(Label())  # Adiciona um espaço vazio na grid para alinhar o botão
+        self.login_layout.add_widget(Label())
         self.login_button = Button(text='Entrar')
         self.login_button.bind(on_press=self.verify_credentials)
         self.login_layout.add_widget(self.login_button)
@@ -54,10 +54,10 @@ class EmailScreen(Screen):
         conn.close()
 
         if user:
-            print("Sucesso a entrar.")
+            print("Sucesso a entrar no menu principal.")
             self.manager.current = 'Main'
         else:
-            print("Tente de novo.")
+            print("Um dos dois campos está incorreto! Tenta de novo")
 
 class MainScreen(Screen):
     def __init__(self, **kwargs):
@@ -71,8 +71,8 @@ class MainScreen(Screen):
         button_layout = GridLayout(cols=2, size_hint=(None, None), width=1000, height=200)
         
         # Botões
-        self.add_client_button = Button(text='Adicionar novo Cliente', size_hint=(1, None), height=100, background_color=(1, 1, 1, 1))
-        self.add_encomenda_button = Button(text='Adicionar nova Encomenda', size_hint=(1, None), height=50, background_color=(0, 0, 0, 0))
+        self.add_client_button = Button(text='Adicionar novo Cliente', size_hint=(1, None), height=100, background_color=(144/255, 238/255, 144/255, 1))
+        self.add_encomenda_button = Button(text='Adicionar nova Encomenda', size_hint=(1, None), height=100, background_color=(144/255, 238/255, 144/255, 1))
         
         # Adiciona-se a função dos botões (ao carregar)
         self.add_client_button.bind(on_press=self.go_to_client_screen)
@@ -251,10 +251,19 @@ class Pedido(Screen):
         self.back_button.bind(on_press=self.go_to_main_screen)
         self.login_layout.add_widget(self.back_button)
         
+        # Botão para enviar o pedido
+        self.send_button = Button(text='Enviar Pedido')
+        self.send_button.bind(on_press=self.send_order_to_database)
+        self.login_layout.add_widget(self.send_button)
+        
         # Adiciona o widget de imagem do hambúrguer selecionado
         self.selected_hamburguer_image = Image(size_hint=(None, None), width=200, height=200)
+        self.selected_hamburguer_image.pos_hint = {'center_x': 0.5, 'y': 0.3}  # Posiciona o widget no centro horizontal e a 30% da altura da tela
         self.add_widget(self.selected_hamburguer_image)
 
+    def send_order_to_database(self, instance):
+        self.calculate_total()  # Chama o método para inserir o pedido na base de dados
+        
     def go_to_main_screen(self, instance):
         self.manager.current = 'Main'
         
@@ -272,11 +281,30 @@ class Pedido(Screen):
         quantity = int(self.quantity_input.text) if self.quantity_input.text else 0
         price_per_burger = self.hamburguer_prices.get(hamburguer_name, 0)
         total = quantity * price_per_burger
-        self.total_label.text = f'R${total:.2f}'  # Exibe o total na label
+        self.total_label.text = f'{total:.2f}€'  # Exibe o total na label
+        
+        # Recupera o ID do cliente
+        client_name = self.client_select_button.text
+        self.cursor.execute("SELECT id_cliente FROM Clientes WHERE nome = ?", (client_name,))
+        client_data = self.cursor.fetchone()
+        if client_data is None:
+            print("Cliente não encontrado.")
+            return
+        client_id = client_data[0]
+
+        # Insere o pedido na base de dados
+        size = self.size_spinner.text
+        if size not in ('Pequeno', 'Médio', 'Grande'):
+            print("Tamanho inválido!")
+            return
+        self.cursor.execute("INSERT INTO Pedidos (id_cliente, nome_hamburguer, quantidade, tamanho, valor_total) VALUES (?, ?, ?, ?, ?)", 
+                            (client_id, hamburguer_name, quantity, size, total))
+        self.conn.commit()  # Confirma a inserção na base de dados
     
     def update_hamburguer_image(self, hamburguer_name):
         # Atualiza a imagem do hambúrguer selecionado
-        image_path = self.hamburguer_images.get(hamburguer_name, 'hamburguer1.jpg' ,'hamburguer2.jpg')
+        image_path = self.hamburguer_images.get(hamburguer_name, 'hamburguer1.jpg')
+        image_path = self.hamburguer_images.get(hamburguer_name, 'hamburguer2.jpg')
         self.selected_hamburguer_image.source = image_path
         self.selected_hamburguer_image.reload()  # Recarrega a imagem para garantir que a nova imagem seja exibida
 
