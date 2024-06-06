@@ -203,3 +203,49 @@ def delete_hamburguer_ingrediente(id):
     conn.commit()
     conn.close()
     return 'Hamburguer e os respetivos ingredientes excluídos com sucesso.'
+
+# Serve para obter todos os dados da tabela de dados "Pedidos"
+@app.route('/pedidos', methods=['GET'])
+def get_pedido():
+    conn = db_connection()
+    pedido = conn.execute('SELECT * FROM Pedidos').fetchall()
+    conn.close()
+    return jsonify([{'id_pedido': row[0], 'id_cliente': row[1], 'nome_hamburguer': row[2],
+                     'quantidade': row[3], 'tamanho': row[4], 'data_hora': row[5], 'valor_total': row[6]} for row in pedido])
+
+# Serve para adicionar dados na tabela de dados "Pedidos"
+@app.route('/pedidos', methods=['POST'])
+def add_pedido():
+    new_pedido = request.json
+    conn = db_connection()
+    conn.execute('INSERT INTO Pedidos (id_cliente, nome_hamburguer, quantidade, tamanho, data_hora, valor_total) VALUES (?, ?, ?, ?, ?, ?)',
+                 (new_pedido['id_cliente'], new_pedido['nome_hamburguer'], new_pedido['quantidade'],
+                  new_pedido['tamanho'], new_pedido['data_hora'], new_pedido['valor_total']))
+    conn.commit()
+    conn.close()
+    return 'Novo Pedido adicionado com sucesso.', 201
+
+# Serve para atualizar dados na tabela de dados "Pedidos"
+@app.route('/pedidos/<int:id>', methods=['PUT'])
+def update_pedido(id):
+    updated_pedido = request.json
+    conn = db_connection()
+    conn.execute('UPDATE Pedidos SET id_cliente=?, nome_hamburguer=?, quantidade=?, tamanho=?, data_hora=?, valor_total=? WHERE id_pedido=?',
+                 (updated_pedido['id_cliente'], updated_pedido['nome_hamburguer'],
+                  updated_pedido['quantidade'], updated_pedido['tamanho'], updated_pedido['data_hora'],
+                  updated_pedido['valor_total'], id))
+    conn.commit()
+    conn.close()
+    return 'Pedido atualizado com sucesso.'
+
+# Serve para excluir dados na tabela de dados "Pedidos"
+@app.route('/pedidos/<int:id>', methods=['DELETE'])
+def delete_pedido(id):
+    conn = db_connection()
+    conn.execute('DELETE FROM Pedidos WHERE id_pedido=?', (id,))
+    conn.commit()
+    conn.close()
+    return 'Pedido excluído com sucesso.'
+
+if __name__ == '__main__':
+    app.run(debug=True)
