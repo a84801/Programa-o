@@ -86,3 +86,42 @@ def delete_user(id):
     conn.commit()
     conn.close()
     return 'User excluído com sucesso.'
+
+# Serve para obter todos os dados na tabela de dados "Ingredientes"
+@app.route('/ingredientes', methods=['GET'])
+def get_ingrediente():
+    conn = db_connection()
+    ingrediente = conn.execute('SELECT * FROM Ingredientes').fetchall()
+    conn.close()
+    return jsonify([{'id_ingrediente': row[0], 'nome_ingrediente': row[1]} for row in ingrediente])
+
+# Serve para adicionar dados na tabela de dados "Ingredientes"
+@app.route('/ingredientes', methods=['POST'])
+def add_ingrediente():
+    new_ingrediente = request.json
+    conn = db_connection()
+    conn.execute('INSERT INTO Ingredientes (nome_ingrediente) VALUES (?)',
+                 (new_ingrediente['nome_ingrediente'],))
+    conn.commit()
+    conn.close()
+    return 'Novo(s) ingrediente(s) adicionado(s) com sucesso.', 201
+
+# Serve para atualizar dados na tabela de dados "Ingredientes"
+@app.route('/ingredientes/<int:id>', methods=['PUT'])
+def update_ingrediente(id):
+    updated_ingrediente = request.json
+    conn = db_connection()
+    conn.execute('UPDATE Ingredientes SET nome_ingrediente=? WHERE id_ingrediente=?',
+                 (updated_ingrediente['nome_ingrediente'], id))
+    conn.commit()
+    conn.close()
+    return 'Ingrediente(s) atualizado(s) com sucesso.'
+
+# Serve para excluir dados na tabela de dados "Ingredientes"
+@app.route('/ingredientes/<int:id>', methods=['DELETE'])
+def delete_ingrediente(id):
+    conn = db_connection()
+    conn.execute('DELETE FROM Ingredientes WHERE id_ingrediente=?', (id,))
+    conn.commit()
+    conn.close()
+    return 'Ingrediente(s) excluído(s) com sucesso.'
