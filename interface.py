@@ -23,16 +23,16 @@ class EmailScreen(Screen):
         self.image = Image(source='hamburgueria.jpg', allow_stretch=True, keep_ratio=False, size_hint=(1, 1))
         self.add_widget(self.image)
 
-        # Formulário e o tamanho que irá ocupar
+        # Layout do formulário de login com 2 colunas e um tamanho específico
         self.login_layout = GridLayout(cols=2, size_hint=(None, None), width=1000, height=200)
         self.add_widget(self.login_layout)
 
-        # Adiciona o formulário do Email
+        # Adiciona o campo de Email no formulário
         self.login_layout.add_widget(Label(text='Email'))
         self.login_input = TextInput(multiline=False)
         self.login_layout.add_widget(self.login_input)
 
-        # Adiciona o formulário da Password
+        # Adiciona o campo de Password no formulário
         self.login_layout.add_widget(Label(text='Password'))
         self.password_input = TextInput(password=True, multiline=False)
         self.login_layout.add_widget(self.password_input)
@@ -43,6 +43,7 @@ class EmailScreen(Screen):
         self.login_button.bind(on_press=self.verify_credentials)
         self.login_layout.add_widget(self.login_button)
 
+    # Função para verificar as credenciais de login
     def verify_credentials(self, instance):
         login = self.login_input.text
         password = self.password_input.text
@@ -57,7 +58,7 @@ class EmailScreen(Screen):
             print("Sucesso a entrar no menu principal.")
             self.manager.current = 'Main'
         else:
-            print("Um dos dois campos está incorreto! Tenta de novo")
+            print("Um dos dois campos está incorreto! Tenta de novo!")
 
 class MainScreen(Screen):
     def __init__(self, **kwargs):
@@ -67,7 +68,7 @@ class MainScreen(Screen):
         self.image = Image(source='hamburgueria.jpg', allow_stretch=True, keep_ratio=False, size_hint=(1, 1))
         self.add_widget(self.image)
         
-        #
+        # Layout de grade para os botões com 2 colunas, tamanho especificado
         button_layout = GridLayout(cols=2, size_hint=(None, None), width=1000, height=200)
         
         # Botões
@@ -181,7 +182,6 @@ class Pedido(Screen):
         self.hamburguer_images = {
             'Hamburguer Normal': 'hamburguer1.jpg',
             'Hamburguer com Ovo Estrelado': 'hamburguer2.jpg',
-            # Adicione mais hambúrgueres e seus caminhos de imagem conforme necessário
         }
         
         # Obtendo os nomes dos clientes da base de dados
@@ -306,7 +306,7 @@ class Pedido(Screen):
         image_path = self.hamburguer_images.get(hamburguer_name, 'hamburguer1.jpg')
         image_path = self.hamburguer_images.get(hamburguer_name, 'hamburguer2.jpg')
         self.selected_hamburguer_image.source = image_path
-        self.selected_hamburguer_image.reload()  # Recarrega a imagem para garantir que a nova imagem seja exibida
+        self.selected_hamburguer_image.reload()
 
 class First(ScreenManager):
     pass
