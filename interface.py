@@ -98,43 +98,50 @@ class Cliente(Screen):
         self.conn = db_connection()
         self.cursor = self.conn.cursor()
         
-        # Imagem principal que ocupa a página inteira
+        # Adiciona uma imagem de fundo que ocupa toda a tela
         self.image = Image(source='hamburgueria.jpg', allow_stretch=True, keep_ratio=False, size_hint=(1, 1))
         self.add_widget(self.image)
         
-        # Formulário e o tamanho que irá ocupar
+        # Cria um layout em grade para o formulário de cliente
         self.login_layout = GridLayout(cols=2, size_hint=(None, None), width=1000, height=200)
         self.add_widget(self.login_layout)
         
+        # Adiciona campos para inserir o nome completo do cliente
         self.login_layout.add_widget(Label(text='Nome completo'))
         self.client_name = TextInput(multiline=False)
         self.login_layout.add_widget(self.client_name)
 
+        # Adiciona campos para inserir a morada do cliente
         self.login_layout.add_widget(Label(text='Morada'))
         self.client_address = TextInput(multiline=False)
         self.login_layout.add_widget(self.client_address)
 
+        # Adiciona campos para inserir o número de telemóvel do cliente
         self.login_layout.add_widget(Label(text='Número de telemóvel'))
         self.client_phone = TextInput(multiline=False)
         self.login_layout.add_widget(self.client_phone)
 
+        # Botão para adicionar um cliente à base de dados
         self.add_client_button = Button(text='Adicionar Cliente')
         self.add_client_button.bind(on_press=self.add_client)
         self.login_layout.add_widget(self.add_client_button)
         
+        # Botão para apagar um cliente da base de dados
         self.delete_client_button = Button(text='Apagar Cliente')
         self.delete_client_button.bind(on_press=self.delete_client)
         self.login_layout.add_widget(self.delete_client_button)
 
+        # Botão para voltar ao menu principal
         self.back_button = Button(text='Voltar para o Menu Principal', size_hint=(1, 1), width=200, height=50)
         self.back_button.bind(on_press=self.go_to_main_screen)
         self.login_layout.add_widget(self.back_button)
 
+    # Método para voltar à página principal
     def go_to_main_screen(self, instance):
         self.manager.current = 'Main'
 
+    # Método para adicionar um cliente à base de dados
     def add_client(self, instance):
-        # Function to add a client to the database
         client_name = self.client_name.text
         client_address = self.client_address.text
         client_phone = self.client_phone.text
@@ -149,6 +156,7 @@ class Cliente(Screen):
         else:
             print("Por favor, preencha todos os campos.")
 
+    # Método para apagar um cliente da base de dados
     def delete_client(self, instance):
         client_name = self.client_name.text
         if client_name:
