@@ -39,7 +39,7 @@ class EmailScreen(Screen):
 
         # Adiciona o botão de login na parte inferior do layout
         self.login_layout.add_widget(Label())
-        self.login_button = Button(text='Entrar')
+        self.login_button = Button(text='Entrar', background_color=(144/255, 238/255, 144/255, 1))
         self.login_button.bind(on_press=self.verify_credentials)
         self.login_layout.add_widget(self.login_button)
 
@@ -124,17 +124,17 @@ class Cliente(Screen):
         self.login_layout.add_widget(self.client_phone)
 
         # Botão para adicionar um cliente à base de dados
-        self.add_client_button = Button(text='Adicionar Cliente')
+        self.add_client_button = Button(text='Adicionar Cliente', background_color=(144/255, 238/255, 144/255, 1))
         self.add_client_button.bind(on_press=self.add_client)
         self.login_layout.add_widget(self.add_client_button)
         
         # Botão para apagar um cliente da base de dados
-        self.delete_client_button = Button(text='Apagar Cliente')
+        self.delete_client_button = Button(text='Apagar Cliente', background_color=(144/255, 238/255, 144/255, 1))
         self.delete_client_button.bind(on_press=self.delete_client)
         self.login_layout.add_widget(self.delete_client_button)
 
         # Botão para voltar ao menu principal
-        self.back_button = Button(text='Voltar para o Menu Principal', size_hint=(1, 1), width=200, height=50)
+        self.back_button = Button(text='Voltar para o Menu Principal', size_hint=(1, 1), width=200, height=50, background_color=(144/255, 238/255, 144/255, 1))
         self.back_button.bind(on_press=self.go_to_main_screen)
         self.login_layout.add_widget(self.back_button)
 
@@ -205,7 +205,7 @@ class Pedido(Screen):
             self.client_dropdown.add_widget(btn)
         
         # Botão para abrir o dropdown de seleção de cliente
-        self.client_select_button = Button(text='Selecionar Cliente')
+        self.client_select_button = Button(text='Selecionar Cliente', background_color=(144/255, 238/255, 144/255, 1))
         self.client_select_button.bind(on_release=self.client_dropdown.open)
         self.client_dropdown.bind(on_select=lambda instance, x: self.show_selected_client(x))
         
@@ -229,7 +229,7 @@ class Pedido(Screen):
             self.hamburguer_prices[hamburguer[0]] = hamburguer[1]
         
         # Botão para abrir o dropdown de seleção de hambúrguer
-        self.hamburguer_select_button = Button(text='Selecionar Hambúrguer')
+        self.hamburguer_select_button = Button(text='Selecionar Hambúrguer', background_color=(144/255, 238/255, 144/255, 1))
         self.hamburguer_select_button.bind(on_release=self.hamburguer_dropdown.open)
         self.hamburguer_dropdown.bind(on_select=lambda instance, x: self.show_selected_hamburguer(x))
         
@@ -264,12 +264,12 @@ class Pedido(Screen):
         self.login_layout.add_widget(self.selected_hamburguer_label)
         
         # Botão para voltar ao menu principal
-        self.back_button = Button(text='Voltar para o Menu Principal')
+        self.back_button = Button(text='Voltar para o Menu Principal', background_color=(144/255, 238/255, 144/255, 1))
         self.back_button.bind(on_press=self.go_to_main_screen)
         self.login_layout.add_widget(self.back_button)
         
         # Botão para enviar o pedido
-        self.send_button = Button(text='Enviar Pedido')
+        self.send_button = Button(text='Enviar Pedido', background_color=(144/255, 238/255, 144/255, 1))
         self.send_button.bind(on_press=self.send_order_to_database)
         self.login_layout.add_widget(self.send_button)
         
