@@ -64,31 +64,33 @@ class MainScreen(Screen):
     def __init__(self, **kwargs):
         super(MainScreen, self).__init__(**kwargs)
         
-        # Imagem principal que ocupa a página inteira
+        # Adiciona uma imagem de fundo que ocupa a página toda
         self.image = Image(source='hamburgueria.jpg', allow_stretch=True, keep_ratio=False, size_hint=(1, 1))
         self.add_widget(self.image)
         
-        # Layout de grade para os botões com 2 colunas, tamanho especificado
+        # Cria um layout de grade com 2 colunas e tamanho especificado
         button_layout = GridLayout(cols=2, size_hint=(None, None), width=1000, height=200)
         
-        # Botões
+        # Cria botões para adicionar um novo cliente e uma nova encomenda
         self.add_client_button = Button(text='Adicionar novo Cliente', size_hint=(1, None), height=100, background_color=(144/255, 238/255, 144/255, 1))
         self.add_encomenda_button = Button(text='Adicionar nova Encomenda', size_hint=(1, None), height=100, background_color=(144/255, 238/255, 144/255, 1))
         
-        # Adiciona-se a função dos botões (ao carregar)
+        # Vincula eventos de clique dos botões aos métodos apropriados
         self.add_client_button.bind(on_press=self.go_to_client_screen)
         self.add_encomenda_button.bind(on_press=self.go_to_encomenda_screen)
         
-        # Adiciona-se os botões à página
+        # Adiciona os botões ao layout de grade
         button_layout.add_widget(self.add_client_button)
         button_layout.add_widget(self.add_encomenda_button)
         
-        # Adicionando o layout dos botões à direita ao layout principal
+        # Adiciona o layout dos botões à página
         self.add_widget(button_layout)
-        
+    
+    # Método para mudar para a página de clientes
     def go_to_client_screen(self, instance):
         self.manager.current = 'Clientes'
-        
+    
+    # Método para mudar para a página de pedidos
     def go_to_encomenda_screen(self, instance):
         self.manager.current = 'Pedidos'
     
