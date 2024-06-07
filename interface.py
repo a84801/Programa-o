@@ -167,62 +167,69 @@ class Pedido(Screen):
         self.conn = db_connection()
         self.cursor = self.conn.cursor()
         
-        # Imagem principal que ocupa a página inteira
+        # Adiciona uma imagem de fundo que ocupa a página toda
         self.image = Image(source='hamburgueria.jpg', allow_stretch=True, keep_ratio=False, size_hint=(1, 1))
         self.add_widget(self.image)
         
-        # Formulário e o tamanho que irá ocupar
+        # Cria um layout em grade para o formulário dos pedidos
         self.login_layout = GridLayout(cols=2, size_hint=(None, None), width=1000, height=200)
         self.add_widget(self.login_layout)
         
-        # DropDown para escolher o cliente
+        # Cria um dropdown para selecionar o cliente
         self.client_dropdown = DropDown()
         
-        # Mapeie os nomes dos hambúrgueres para os caminhos das imagens correspondentes
+        # Cada hambúrguer corresponde à sua imagem
         self.hamburguer_images = {
             'Hamburguer Normal': 'hamburguer1.jpg',
             'Hamburguer com Ovo Estrelado': 'hamburguer2.jpg',
         }
         
-        # Obtendo os nomes dos clientes da base de dados
+        # Executa uma consulta SQL para obter os nomes dos clientes
         self.cursor.execute('SELECT nome FROM Clientes')
         clientes = self.cursor.fetchall()
         
+        # Adiciona cada cliente ao dropdown
         for cliente in clientes:
             btn = Button(text=cliente[0], size_hint_y=None, height=44)
             btn.bind(on_release=lambda btn: self.client_dropdown.select(btn.text))
             self.client_dropdown.add_widget(btn)
         
+        # Botão para abrir o dropdown de seleção de cliente
         self.client_select_button = Button(text='Selecionar Cliente')
         self.client_select_button.bind(on_release=self.client_dropdown.open)
         self.client_dropdown.bind(on_select=lambda instance, x: self.show_selected_client(x))
         
+        # Adiciona o dropdown de clientes ao layout
         self.login_layout.add_widget(Label(text='Clientes'))
         self.login_layout.add_widget(self.client_select_button)
         
+        # Cria um dropdown para selecionar o hambúrguer
         self.hamburguer_dropdown = DropDown()
         
-        # Obtendo os nomes dos hambúrgueres e seus preços da base de dados
+        # Executa uma consulta SQL para obter os nomes dos hambúrgueres e seus preços
         self.cursor.execute('SELECT nome_hamburguer, preco FROM Hamburgueres')
         hamburguers = self.cursor.fetchall()
         
-        self.hamburguer_prices = {}  # Dicionário para mapear o nome do hambúrguer para o seu preço
+        # Dicionário para escolher o nome do hambúrguer e o seu devido preço
+        self.hamburguer_prices = {}
         for hamburguer in hamburguers:
             btn = Button(text=hamburguer[0], size_hint_y=None, height=44)
             btn.bind(on_release=lambda btn: self.hamburguer_dropdown.select(btn.text))
             self.hamburguer_dropdown.add_widget(btn)
-            self.hamburguer_prices[hamburguer[0]] = hamburguer[1]  # Adiciona o preço ao dicionário
+            self.hamburguer_prices[hamburguer[0]] = hamburguer[1]
         
+        # Botão para abrir o dropdown de seleção de hambúrguer
         self.hamburguer_select_button = Button(text='Selecionar Hambúrguer')
         self.hamburguer_select_button.bind(on_release=self.hamburguer_dropdown.open)
         self.hamburguer_dropdown.bind(on_select=lambda instance, x: self.show_selected_hamburguer(x))
         
+        # Adiciona o dropdown de hambúrgueres ao layout
         self.login_layout.add_widget(Label(text='Hambúrgueres'))
         self.login_layout.add_widget(self.hamburguer_select_button)
         
         # Campo de entrada de texto para a quantidade de hambúrgueres
         self.quantity_input = TextInput(multiline=False, input_type='number', input_filter='int')
-        self.quantity_input.bind(text=self.calculate_total)  # Atualiza o total quando a quantidade muda
+        self.quantity_input.bind(text=self.calculate_total)
         self.login_layout.add_widget(Label(text='Quantidade de Hambúrgueres'))
         self.login_layout.add_widget(self.quantity_input)
         
@@ -235,7 +242,7 @@ class Pedido(Screen):
         self.login_layout.add_widget(Label(text='Tamanho do Hambúrguer'))
         self.login_layout.add_widget(self.size_spinner)
         
-        # Label para exibir o valor total
+        # Label para exibir o valor total do pedido
         self.total_label = Label(text='')
         self.login_layout.add_widget(Label(text='Valor Total'))
         self.login_layout.add_widget(self.total_label)
@@ -243,10 +250,10 @@ class Pedido(Screen):
         # Labels para exibir o cliente e o hambúrguer selecionados
         self.selected_client_label = Label(text='')
         self.login_layout.add_widget(self.selected_client_label)
-        
         self.selected_hamburguer_label = Label(text='')
         self.login_layout.add_widget(self.selected_hamburguer_label)
         
+        # Botão para voltar ao menu principal
         self.back_button = Button(text='Voltar para o Menu Principal')
         self.back_button.bind(on_press=self.go_to_main_screen)
         self.login_layout.add_widget(self.back_button)
@@ -256,34 +263,38 @@ class Pedido(Screen):
         self.send_button.bind(on_press=self.send_order_to_database)
         self.login_layout.add_widget(self.send_button)
         
-        # Adiciona o widget de imagem do hambúrguer selecionado
+        # Adiciona o widget da imagem do hambúrguer selecionado
         self.selected_hamburguer_image = Image(size_hint=(None, None), width=200, height=200)
         self.selected_hamburguer_image.pos_hint = {'center_x': 0.5, 'y': 0.3}  # Posiciona o widget no centro horizontal e a 30% da altura da tela
         self.add_widget(self.selected_hamburguer_image)
 
+    # Método para enviar o pedido para a base de dados
     def send_order_to_database(self, instance):
-        self.calculate_total()  # Chama o método para inserir o pedido na base de dados
-        
+        self.calculate_total()
+    
+    # Método para voltar à página principal
     def go_to_main_screen(self, instance):
         self.manager.current = 'Main'
-        
+    
+    # Método para exibir o cliente selecionado
     def show_selected_client(self, client_name):
         self.client_select_button.text = client_name
     
+    # Método para exibir o hambúrguer selecionado e atualizar a imagem
     def show_selected_hamburguer(self, hamburguer_name):
         self.hamburguer_select_button.text = hamburguer_name
-        self.calculate_total()  # Atualiza o total quando o hambúrguer muda
-        self.update_hamburguer_image(hamburguer_name)  # Atualiza a imagem do hambúrguer
+        self.calculate_total()
+        self.update_hamburguer_image(hamburguer_name)
     
+    # Método para calcular o valor total do pedido
     def calculate_total(self, *args):
-        # Calcula o valor total com base no preço do hambúrguer selecionado e na quantidade
         hamburguer_name = self.hamburguer_select_button.text
         quantity = int(self.quantity_input.text) if self.quantity_input.text else 0
         price_per_burger = self.hamburguer_prices.get(hamburguer_name, 0)
         total = quantity * price_per_burger
-        self.total_label.text = f'{total:.2f}€'  # Exibe o total na label
+        self.total_label.text = f'{total:.2f}€'
         
-        # Recupera o ID do cliente
+        # Vai recuperar o id do cliente
         client_name = self.client_select_button.text
         self.cursor.execute("SELECT id_cliente FROM Clientes WHERE nome = ?", (client_name,))
         client_data = self.cursor.fetchone()
@@ -292,25 +303,27 @@ class Pedido(Screen):
             return
         client_id = client_data[0]
 
-        # Insere o pedido na base de dados
+        # Vai inserir o pedido na base de dados
         size = self.size_spinner.text
         if size not in ('Pequeno', 'Médio', 'Grande'):
             print("Tamanho inválido!")
             return
         self.cursor.execute("INSERT INTO Pedidos (id_cliente, nome_hamburguer, quantidade, tamanho, valor_total) VALUES (?, ?, ?, ?, ?)", 
                             (client_id, hamburguer_name, quantity, size, total))
-        self.conn.commit()  # Confirma a inserção na base de dados
+        self.conn.commit()
     
+    # Método para atualizar a imagem do hambúrguer selecionado
     def update_hamburguer_image(self, hamburguer_name):
-        # Atualiza a imagem do hambúrguer selecionado
         image_path = self.hamburguer_images.get(hamburguer_name, 'hamburguer1.jpg')
         image_path = self.hamburguer_images.get(hamburguer_name, 'hamburguer2.jpg')
         self.selected_hamburguer_image.source = image_path
         self.selected_hamburguer_image.reload()
 
+# Classe que gerencia as páginas
 class First(ScreenManager):
     pass
-    
+
+# Classe principal da aplicação
 class Aplicação(App):
     def build(self):
         first = First()
